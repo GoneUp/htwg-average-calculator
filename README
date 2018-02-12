@@ -1,0 +1,5 @@
+## HTWG Average Calcualtor
+### Install
+```
+pip intall argparse
+```
