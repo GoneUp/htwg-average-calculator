@@ -1,0 +1,24 @@
+
+# Fields STG number text semester etcs
+# Operators lt gt eq
+
+{
+    "configs": {
+        "ain": {
+            "mode": "blacklist",
+            "rules": [
+                {
+                    "field": "STG",
+                    "operator": "eq",
+                    "operand": "AIN"
+                },
+                {
+                    "field": "STG",
+                    "operator": "eq",
+                    "operand": "AIN"
+                }
+            ]
+        }
+
+    }
+}

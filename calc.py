@@ -3,6 +3,7 @@ import locale
 
 from bs4 import BeautifulSoup
 import sys
+import json
 
 cmd_args = None
 
@@ -55,6 +56,7 @@ def parse_html(path):
         grade_obj = GradeRow(entry)
         results.append(grade_obj)
 
+    f.close()
     return results
 
 def filter_grades(grades):
@@ -66,7 +68,7 @@ def filter_grades(grades):
         #Lets filter that
 
 
-        if grade.number < 21000 or grade.etcs == 0 or grade.grade == None:
+        if grade.number < 21000 or grade.etcs == 0 or grade.grade == None or grade.number == 22262:
             if cmd_args.debug:
                 print("Filtered course: {}".format(grade))
             continue
@@ -97,10 +99,13 @@ def main():
     print("HTWG QIS Average calculator, created by Henry Strobel (GoneUp)")
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-t', action='store_true', default=False,
+    parser.add_argument('-v', action='store_true', default=False, help='verbose logging',
                         dest='debug')
+    parser.add_argument('--course', default="ain",
+                        help='Choose the ruleset based on which the grades are filtered. Available: ain')
     parser.add_argument('file', metavar='HTML_FILE',
                         help='Location of your downloaded html file')
+
     cmd_args = parser.parse_args()
 
     parsed_courses = parse_html(cmd_args.file)
