@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup
 import sys
 import json
 
+from rules import *
+
 cmd_args = None
 
 
@@ -39,6 +41,7 @@ class GradeRow():
     def __str__(self):
         return "Subject {} - CP {} - Grade {}".format(self.text, self.etcs, self.grade)
 
+
 ''' 
 :returns list of courses taken
 '''
@@ -59,21 +62,24 @@ def parse_html(path):
     f.close()
     return results
 
-def filter_grades(grades):
+def filter_grades(grades, ruleset):
     new_grades = list()
 
     for grade in grades:
         #Observations:
         #Everything under semester 3 is lower than num 21000
         #Lets filter that
+        for rule in ruleset.rules:
+            result = rule_matches(rule, grade)
 
+            if ruleset.mode == "blacklist" and result:
+                continue
+            elif ruleset.mode == "whitelist" and not result:
+                continue
 
-        if grade.number < 21000 or grade.etcs == 0 or grade.grade == None or grade.number == 22262:
-            if cmd_args.debug:
-                print("Filtered course: {}".format(grade))
-            continue
 
         new_grades.append(grade)
+
 
     return new_grades
 
@@ -93,6 +99,8 @@ def calc_average(grades):
 
     return average
 
+
+
 def main():
     global cmd_args
 
@@ -108,8 +116,10 @@ def main():
 
     cmd_args = parser.parse_args()
 
+    ruleset = load_ruleset(cmd_args.course, cmd_args.debug)
+
     parsed_courses = parse_html(cmd_args.file)
-    filterd_courses = filter_grades(parsed_courses)
+    filterd_courses = filter_grades(parsed_courses, ruleset)
 
     print("\nCourses to include into the average:")
     for i in filterd_courses: print(str(i))

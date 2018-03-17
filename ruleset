@@ -8,14 +8,24 @@
             "mode": "blacklist",
             "rules": [
                 {
-                    "field": "STG",
-                    "operator": "eq",
-                    "operand": "AIN"
+                    "field": "number",
+                    "operator": "lt",
+                    "operand": "21000"
                 },
                 {
-                    "field": "STG",
+                    "field": "etcs",
                     "operator": "eq",
-                    "operand": "AIN"
+                    "operand": "0"
+                },
+                {
+                    "field": "etcs",
+                    "operator": "eq",
+                    "operand": "None"
+                },
+                {
+                    "field": "number",
+                    "operator": "eq",
+                    "operand": "22262"
                 }
             ]
         }
